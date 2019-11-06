@@ -96,7 +96,7 @@ namespace NorthwindConsole
                     else if (choice == "4")
                     {
                         var db = new NorthwindContext();
-                        var query = db.Categories.OrderBy(p => p.CategoryId);
+                        var query = db.Categories.Include("Products").OrderBy(p => p.CategoryId);
                         foreach (var item in query)
                         {
                             Console.WriteLine($"{item.CategoryName}");
