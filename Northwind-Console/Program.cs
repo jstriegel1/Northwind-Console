@@ -50,7 +50,20 @@ namespace NorthwindConsole
                         if (isValid)
                         {
                             logger.Info("Validation passed");
-                            // TODO: save category to db
+
+                            var db = new NorthwindContext();
+                            // check for unique name
+                            if (db.Categories.Any(c => c.CategoryName == category.CategoryName))
+                            {
+                                // generate validation error
+                                isValid = false;
+                                results.Add(new ValidationResult("Name exists", new string[] { "CategoryName" }));
+                            }
+                            else
+                            {
+                                logger.Info("Validation passed");
+                                // TODO: save category to db
+                            }
                         }
                         if (!isValid)
                         {
