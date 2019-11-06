@@ -20,6 +20,7 @@ namespace NorthwindConsole
                 {
                     Console.WriteLine("1) Display Categories");
                     Console.WriteLine("2) Add Category");
+                    Console.WriteLine("3) Display Category and related products");
                     Console.WriteLine("\"q\" to quit");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -49,8 +50,6 @@ namespace NorthwindConsole
                         var isValid = Validator.TryValidateObject(category, context, results, true);
                         if (isValid)
                         {
-                            logger.Info("Validation passed");
-
                             var db = new NorthwindContext();
                             // check for unique name
                             if (db.Categories.Any(c => c.CategoryName == category.CategoryName))
@@ -72,6 +71,20 @@ namespace NorthwindConsole
                                 logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                             }
                         }
+                    }
+                    else if (choice == "3")
+                    {
+                        var db = new NorthwindContext();
+                        var query = db.Categories.OrderBy(p => p.CategoryId);
+
+                        Console.WriteLine("Select the category whose products you want to display:");
+                        foreach (var item in query)
+                        {
+                            Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
+                        }
+                        int id = int.Parse(Console.ReadLine());
+                        Console.Clear();
+                        logger.Info($"CategoryId {id} selected");
                     }
                     Console.WriteLine();
 
