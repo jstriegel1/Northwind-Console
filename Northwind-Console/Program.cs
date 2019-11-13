@@ -22,6 +22,7 @@ namespace NorthwindConsole
                     Console.WriteLine("2) Add Category");
                     Console.WriteLine("3) Display Category and related products");
                     Console.WriteLine("4) Display all Categories and their related products");
+                    Console.WriteLine("5) Display Products");
                     Console.WriteLine("\"q\" to quit");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -62,7 +63,9 @@ namespace NorthwindConsole
                             else
                             {
                                 logger.Info("Validation passed");
-                                // TODO: save category to db
+                                //save category to db
+                                db.AddCategory(category);
+                                logger.Info("Category added - {name}", category.CategoryName);
                             }
                         }
                         if (!isValid)
@@ -105,6 +108,23 @@ namespace NorthwindConsole
                                 Console.WriteLine($"\t{p.ProductName}");
                             }
                         }
+                    }
+                    else if (choice == "5")
+                    {
+                        string displayChoice;
+                        do
+                        {
+                            Console.WriteLine("Which products would you like displayed?");
+                            Console.WriteLine("1) All Products");
+                            Console.WriteLine("2) Active Products");
+                            Console.WriteLine("3) Discontinued Products");
+                            Console.WriteLine("4) Return to main menu");
+                            displayChoice = Console.ReadLine();
+                            Console.Clear();
+                            logger.Info($"Option {displayChoice} selected");
+                        }
+                        while (displayChoice != "4");
+                        
                     }
                     Console.WriteLine();
 
