@@ -337,5 +337,29 @@ namespace NorthwindConsole
             }
             return null;
         }
+
+        public static Product GetProduct(NorthwindContext db)
+        {
+
+            var query = db.Products.OrderBy(p => p.ProductID);
+            foreach (var item in query)
+            {
+                Console.WriteLine($"{item.ProductID}) {item.ProductName}");
+            }
+            Console.Write("==>");
+            int id = int.Parse(Console.ReadLine());
+            Console.Clear();
+
+            Product product = db.Products.FirstOrDefault(p => p.ProductID == id);
+            if (product != null)
+            {
+                return product;
+            }
+            else
+            {
+                logger.Error("Invalid Post Id");
+                return null;
+            }
+        }
     }
 }
