@@ -267,6 +267,7 @@ namespace NorthwindConsole
                         Console.WriteLine($"Discontinued: {product.Discontinued}");
 
                     }
+                    
                     Console.WriteLine();
 
                 } while (choice.ToLower() != "q");
@@ -276,6 +277,65 @@ namespace NorthwindConsole
                 logger.Error(ex.Message);
             }
             logger.Info("Program ended");
+        }
+
+        public static Product InputProduct(NorthwindContext db)
+        {
+            Product product = new Product();
+            Console.Write("Enter Product Name: ");
+            product.ProductName = Console.ReadLine();
+
+            Console.WriteLine("Enter the Supplier ID from the list below:");
+            var suppliers = db.Suppliers.OrderBy(s => s.SupplierId);
+            foreach (Supplier s in suppliers)
+            {
+                Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
+            }
+            Console.Write("==>");
+            product.SupplierId = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter the Cateogry ID from the list below:");
+            var categories = db.Categories.OrderBy(c => c.CategoryId);
+            foreach (Category c in categories)
+            {
+                Console.WriteLine($" {c.CategoryId}) {c.CategoryName}");
+            }
+            Console.Write("==>");
+            product.CategoryId = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Enter Quantity Per Unit: ");
+            product.QuantityPerUnit = Console.ReadLine();
+
+            Console.Write("Enter Unit Price: ");
+            product.UnitPrice = Convert.ToDecimal(Console.ReadLine());
+
+            Console.Write("Enter Units in Stock: ");
+            product.UnitsInStock = Convert.ToInt16(Console.ReadLine());
+
+            Console.Write("Enter Units on Order: ");
+            product.UnitsOnOrder = Convert.ToInt16(Console.ReadLine());
+
+            Console.Write("Enter Reorder Level: ");
+            product.ReorderLevel = Convert.ToInt16(Console.ReadLine());
+
+            product.Discontinued = false;
+
+            ValidationContext context = new ValidationContext(product, null, null);
+            List<ValidationResult> results = new List<ValidationResult>();
+
+            var isValid = Validator.TryValidateObject(product, context, results, true);
+            if (isValid)
+            {
+                return product;
+            }
+            else
+            {
+                foreach (var result in results)
+                {
+                    logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
+                }
+            }
+            return null;
         }
     }
 }
