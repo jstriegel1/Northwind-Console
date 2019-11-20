@@ -33,13 +33,7 @@ namespace NorthwindConsole
                     if (choice == "1")
                     {
                         var db = new NorthwindContext();
-                        var query = db.Categories.OrderBy(p => p.CategoryName);
-
-                        Console.WriteLine($"{query.Count()} records returned");
-                        foreach (var item in query)
-                        {
-                            Console.WriteLine($"{item.CategoryName} - {item.Description}");
-                        }
+                        DisplayCategories(db);
                     }
                     else if (choice == "2")
                     {
@@ -85,10 +79,8 @@ namespace NorthwindConsole
                         var query = db.Categories.OrderBy(p => p.CategoryId);
 
                         Console.WriteLine("Select the category whose products you want to display:");
-                        foreach (var item in query)
-                        {
-                            Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
-                        }
+                        DisplayCategories(db);
+
                         int id = int.Parse(Console.ReadLine());
                         Console.Clear();
                         logger.Info($"CategoryId {id} selected");
@@ -184,11 +176,9 @@ namespace NorthwindConsole
                         product.SupplierId = Convert.ToInt32(Console.ReadLine());
 
                         Console.WriteLine("Enter the Cateogry ID from the list below:");
-                        var categories = db.Categories.OrderBy(c => c.CategoryId);
-                        foreach (Category c in categories)
-                        {
-                            Console.WriteLine($" {c.CategoryId}) {c.CategoryName}");
-                        }
+
+                        DisplayCategories(db);
+
                         Console.Write("==>");
                         product.CategoryId = Convert.ToInt32(Console.ReadLine());
 
@@ -386,6 +376,16 @@ namespace NorthwindConsole
                 Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
             }
 
+        }
+
+        public static void DisplayCategories(NorthwindContext db)
+        {
+            //display all categories
+            var categories = db.Categories.OrderBy(c => c.CategoryId);
+            foreach (Category c in categories)
+            {
+                Console.WriteLine($" {c.CategoryId}) {c.CategoryName} - {c.Description}");
+            }
         }
     }
 }
