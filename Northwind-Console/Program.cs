@@ -164,6 +164,81 @@ namespace NorthwindConsole
                         while (displayChoice != "4");
                         
                     }
+                    else if (choice == "6")
+                    {
+                        var db = new NorthwindContext();
+                        Product product = new Product();
+
+                        Console.Write("Enter Product Name: ");
+                        product.ProductName = Console.ReadLine();
+
+                        Console.WriteLine("Enter the Supplier ID from the list below:");
+                        var suppliers = db.Suppliers.OrderBy(s => s.SupplierId);
+                        foreach (Supplier s in suppliers)
+                        {
+                            Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
+                        }
+                        Console.Write("==>");
+                        product.SupplierId = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("Enter the Cateogry ID from the list below:");
+                        var categories = db.Categories.OrderBy(c => c.CategoryId);
+                        foreach (Category c in categories)
+                        {
+                            Console.WriteLine($" {c.CategoryId}) {c.CategoryName}");
+                        }
+                        Console.Write("==>");
+                        product.CategoryId = Convert.ToInt32(Console.ReadLine());
+
+                        Console.Write("Enter Quantity Per Unit: ");
+                        product.QuantityPerUnit = Console.ReadLine();
+
+                        Console.Write("Enter Unit Price: ");
+                        product.UnitPrice = Convert.ToDecimal(Console.ReadLine());
+
+                        Console.Write("Enter Units in Stock: ");
+                        product.UnitsInStock = Convert.ToInt16(Console.ReadLine());
+                        //int.TryParse(Console.ReadLine(), out int UnitsInStock);
+
+                        Console.Write("Enter Units on Order: ");
+                        product.UnitsOnOrder = Convert.ToInt16(Console.ReadLine());
+
+                        Console.Write("Enter Reorder Level: ");
+                        product.ReorderLevel = Convert.ToInt16(Console.ReadLine());
+
+                        product.Discontinued = false;
+
+                        ValidationContext context = new ValidationContext(product, null, null);
+                        List<ValidationResult> results = new List<ValidationResult>();
+
+                        var isValid = Validator.TryValidateObject(product, context, results, true);
+                        if (isValid)
+                        {
+
+                            // check for unique name
+                            if (db.Products.Any(p => p.ProductName == product.ProductName))
+                            {
+                                // generate validation error
+                                isValid = false;
+                                results.Add(new ValidationResult("Name exists", new string[] { "ProductName" }));
+                                Console.WriteLine("Product was not added to the database");
+                            }
+                            else
+                            {
+                                logger.Info("Validation passed");
+                                //save category to db
+                                db.AddProduct(product);
+                                logger.Info("Product added - {name}", product.ProductName);
+                            }
+                        }
+                        if (!isValid)
+                        {
+                            foreach (var result in results)
+                            {
+                                logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
+                            }
+                        }
+                    }
                     Console.WriteLine();
 
                 } while (choice.ToLower() != "q");
