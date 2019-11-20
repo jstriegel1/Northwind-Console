@@ -147,7 +147,18 @@ namespace NorthwindConsole
                                 }
                                 Console.WriteLine("");
                             }
-                            
+                            else if (displayChoice == "3")
+                            {
+                                var db = new NorthwindContext();
+                                var query = db.Products.Where(p => p.Discontinued == true).OrderBy(p => p.ProductName);
+
+                                Console.WriteLine($"{query.Count()} discontinued product records returned");
+                                foreach (var item in query)
+                                {
+                                    Console.WriteLine($"{item.ProductID} - {item.ProductName}");
+                                }
+                                Console.WriteLine("");
+                            }
 
                         }
                         while (displayChoice != "4");
