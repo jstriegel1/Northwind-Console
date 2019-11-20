@@ -128,13 +128,26 @@ namespace NorthwindConsole
                                 var db = new NorthwindContext();
                                 var query = db.Products.OrderBy(p => p.ProductName);
 
-                                Console.WriteLine($"{query.Count()} records returned");
+                                Console.WriteLine($"{query.Count()} product records returned");
                                 foreach (var item in query)
                                 {
                                     Console.WriteLine($"{item.ProductID}) {item.ProductName}");
                                 }
+                                Console.WriteLine("");
                             }
+                            else if (displayChoice == "2")
+                            {
+                                var db = new NorthwindContext();
+                                var query = db.Products.Where(p => p.Discontinued == false).OrderBy(p => p.ProductName);
 
+                                Console.WriteLine($"{query.Count()} active product records returned");
+                                foreach (var item in query)
+                                {
+                                    Console.WriteLine($"{item.ProductID} - {item.ProductName}");
+                                }
+                                Console.WriteLine("");
+                            }
+                            
 
                         }
                         while (displayChoice != "4");
