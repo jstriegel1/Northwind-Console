@@ -122,6 +122,20 @@ namespace NorthwindConsole
                             displayChoice = Console.ReadLine();
                             Console.Clear();
                             logger.Info($"Option {displayChoice} selected");
+
+                            if (displayChoice == "1")
+                            {
+                                var db = new NorthwindContext();
+                                var query = db.Products.OrderBy(p => p.ProductName);
+
+                                Console.WriteLine($"{query.Count()} records returned");
+                                foreach (var item in query)
+                                {
+                                    Console.WriteLine($"{item.ProductID}) {item.ProductName}");
+                                }
+                            }
+
+
                         }
                         while (displayChoice != "4");
                         
