@@ -25,6 +25,7 @@ namespace NorthwindConsole
                     Console.WriteLine("5) Display Products");
                     Console.WriteLine("6) Add Product");
                     Console.WriteLine("7) Display Specific Product Info");
+                    Console.WriteLine("8) Edit Product Info");
                     Console.WriteLine("\"q\" to quit");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -267,7 +268,22 @@ namespace NorthwindConsole
                         Console.WriteLine($"Discontinued: {product.Discontinued}");
 
                     }
-                    
+                    else if (choice == "8")
+                    {
+
+                        Console.WriteLine("Choose the product you wish to edit:");
+                        var db = new NorthwindContext();
+
+                        var product = GetProduct(db);
+
+                        Product UpdatedProduct = InputProduct(db);
+                        if (UpdatedProduct != null)
+                        {
+                            UpdatedProduct.ProductID = product.ProductID;
+                            db.EditProduct(UpdatedProduct);
+                            logger.Info("Product (id: {productid}) updated", product.ProductID);
+                        }
+                    }
                     Console.WriteLine();
 
                 } while (choice.ToLower() != "q");
