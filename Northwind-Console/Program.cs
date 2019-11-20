@@ -23,6 +23,8 @@ namespace NorthwindConsole
                     Console.WriteLine("3) Display Category and related products");
                     Console.WriteLine("4) Display all Categories and their related products");
                     Console.WriteLine("5) Display Products");
+                    Console.WriteLine("6) Add Product");
+                    Console.WriteLine("7) Display Specific Product Info");
                     Console.WriteLine("\"q\" to quit");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -238,6 +240,32 @@ namespace NorthwindConsole
                                 logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                             }
                         }
+                    }
+                    else if (choice == "7")
+                    {
+                        var db = new NorthwindContext();
+                        var query = db.Products.OrderBy(p => p.ProductID);
+
+                        Console.WriteLine("Select the product for which you want to see more info:");
+                        foreach (var item in query)
+                        {
+                            Console.WriteLine($"{item.ProductID}) {item.ProductName}");
+                        }
+                        Console.Write("==>");
+                        int id = int.Parse(Console.ReadLine());
+                        Console.Clear();
+                        logger.Info($"ProductId {id} selected");
+                        Product product = db.Products.FirstOrDefault(p => p.ProductID == id);
+                        Console.WriteLine($"Product Name: {product.ProductName}");
+                        Console.WriteLine($"Supplier ID: {product.SupplierId}");
+                        Console.WriteLine($"Category ID: {product.CategoryId}");
+                        Console.WriteLine($"Quantity Per Unit: {product.QuantityPerUnit}");
+                        Console.WriteLine($"Unit Price: {product.UnitPrice}");
+                        Console.WriteLine($"Units in Stock: {product.UnitsInStock}");
+                        Console.WriteLine($"Units on Order: {product.UnitsOnOrder}");
+                        Console.WriteLine($"Reorder Level: {product.ReorderLevel}");
+                        Console.WriteLine($"Discontinued: {product.Discontinued}");
+
                     }
                     Console.WriteLine();
 
