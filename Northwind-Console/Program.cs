@@ -176,12 +176,11 @@ namespace NorthwindConsole
                         product.ProductName = Console.ReadLine();
 
                         Console.WriteLine("Enter the Supplier ID from the list below:");
-                        var suppliers = db.Suppliers.OrderBy(s => s.SupplierId);
-                        foreach (Supplier s in suppliers)
-                        {
-                            Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
-                        }
+
+                        DisplaySuppliers(db);
+
                         Console.Write("==>");
+
                         product.SupplierId = Convert.ToInt32(Console.ReadLine());
 
                         Console.WriteLine("Enter the Cateogry ID from the list below:");
@@ -376,6 +375,17 @@ namespace NorthwindConsole
                 logger.Error("Invalid Post Id");
                 return null;
             }
+        }
+
+        public static void DisplaySuppliers(NorthwindContext db)
+        {
+            // display all suppliers
+            var suppliers = db.Suppliers.OrderBy(s => s.SupplierId);
+            foreach (Supplier s in suppliers)
+            {
+                Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
+            }
+
         }
     }
 }
