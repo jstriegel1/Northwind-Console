@@ -36,5 +36,13 @@ namespace NorthwindConsole.Models
             product.Discontinued = UpdatedProduct.Discontinued;
             this.SaveChanges();
         }
+
+        public void EditCategory(Category UpdatedCategory)
+        {
+            Category category = this.Categories.Find(UpdatedCategory.CategoryId);
+            category.CategoryName = UpdatedCategory.CategoryName;
+            category.Description = UpdatedCategory.Description;
+            this.SaveChanges();
+        }
     }
 }
