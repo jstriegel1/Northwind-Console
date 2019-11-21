@@ -22,10 +22,11 @@ namespace NorthwindConsole
                     Console.WriteLine("2) Add Category");
                     Console.WriteLine("3) Display a Category and related products");
                     Console.WriteLine("4) Display all Categories and their related products");
-                    Console.WriteLine("5) Display Products");
-                    Console.WriteLine("6) Add Product");
-                    Console.WriteLine("7) Display Specific Product Info");
-                    Console.WriteLine("8) Edit Product Info");
+                    Console.WriteLine("5) Edit a Category");
+                    Console.WriteLine("6) Display Products");
+                    Console.WriteLine("7) Add Product");
+                    Console.WriteLine("8) Display Specific Product Info");
+                    Console.WriteLine("9) Edit Product Info");
                     Console.WriteLine("\"q\" to quit");
                     Console.Write("==>");
                     choice = Console.ReadLine();
@@ -119,6 +120,21 @@ namespace NorthwindConsole
                     }
                     else if (choice == "5")
                     {
+                        //edit an existing category
+                        var db = new NorthwindContext();
+                        Console.WriteLine("Choose the category you wish to edit:");
+                        var category = GetCategory(db);
+                        Category UpdatedCategory = InputCategory(db);
+                        if (UpdatedCategory != null)
+                        {
+                            UpdatedCategory.CategoryId = category.CategoryId;
+                            db.EditCategory(UpdatedCategory);
+                            logger.Info("Category (id: {categoryid}) updated", category.CategoryId);
+                            Console.WriteLine("");
+                        }
+                    }
+                    else if (choice == "6")
+                    {
                         //display products depending on user choice
                         string displayChoice;
                         do
@@ -180,9 +196,9 @@ namespace NorthwindConsole
 
                         }
                         while (displayChoice != "4");
-                        
+
                     }
-                    else if (choice == "6")
+                    else if (choice == "7")
                     {
                         //add new product
                         var db = new NorthwindContext();
@@ -214,7 +230,7 @@ namespace NorthwindConsole
 
                         Console.Write("Enter Units in Stock: ");
                         product.UnitsInStock = Convert.ToInt16(Console.ReadLine());
-                        
+
 
                         Console.Write("Enter Units on Order: ");
                         product.UnitsOnOrder = Convert.ToInt16(Console.ReadLine());
@@ -258,7 +274,7 @@ namespace NorthwindConsole
                             Console.WriteLine("");
                         }
                     }
-                    else if (choice == "7")
+                    else if (choice == "8")
                     {
                         //display all info for a specific product
                         var db = new NorthwindContext();
@@ -287,7 +303,7 @@ namespace NorthwindConsole
                         Console.WriteLine("");
 
                     }
-                    else if (choice == "8")
+                    else if (choice == "9")
                     {
                         //edit an existing product
                         var db = new NorthwindContext();
@@ -423,7 +439,7 @@ namespace NorthwindConsole
             }
             else
             {
-                logger.Error("Invalid Post Id");
+                logger.Error("Invalid Product Id");
                 Console.WriteLine("");
                 return null;
             }
