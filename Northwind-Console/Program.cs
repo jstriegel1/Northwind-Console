@@ -291,20 +291,16 @@ namespace NorthwindConsole
             product.ProductName = Console.ReadLine();
 
             Console.WriteLine("Enter the Supplier ID from the list below:");
-            var suppliers = db.Suppliers.OrderBy(s => s.SupplierId);
-            foreach (Supplier s in suppliers)
-            {
-                Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
-            }
+
+            DisplaySuppliers(db);
+
             Console.Write("==>");
             product.SupplierId = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Enter the Cateogry ID from the list below:");
-            var categories = db.Categories.OrderBy(c => c.CategoryId);
-            foreach (Category c in categories)
-            {
-                Console.WriteLine($" {c.CategoryId}) {c.CategoryName}");
-            }
+
+            DisplayCategories(db);
+
             Console.Write("==>");
             product.CategoryId = Convert.ToInt32(Console.ReadLine());
 
