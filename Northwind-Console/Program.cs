@@ -373,6 +373,35 @@ namespace NorthwindConsole
             return null;
         }
 
+        public static Category InputCategory(NorthwindContext db)
+        {
+            //ask user for all necessary information to add/edit a category
+            Category category = new Category();
+            Console.Write("Enter Category Name: ");
+            category.CategoryName = Console.ReadLine();
+            Console.WriteLine("");
+            Console.Write("Enter Category Description: ");
+            category.Description = Console.ReadLine();
+
+            ValidationContext context = new ValidationContext(category, null, null);
+            List<ValidationResult> results = new List<ValidationResult>();
+
+            var isValid = Validator.TryValidateObject(category, context, results, true);
+            if (isValid)
+            {
+                return category;
+            }
+            else
+            {
+                foreach (var result in results)
+                {
+                    logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
+                }
+                Console.WriteLine("");
+            }
+            return null;
+        }
+
         public static Product GetProduct(NorthwindContext db)
         {
             //display all products
