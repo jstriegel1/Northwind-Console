@@ -429,6 +429,33 @@ namespace NorthwindConsole
             }
         }
 
+        public static Category GetCategory(NorthwindContext db)
+        {
+            //display all categories
+            //get and return user's choice
+            var query = db.Categories.OrderBy(c => c.CategoryId);
+            foreach (var item in query)
+            {
+                Console.WriteLine($"{item.CategoryId}) {item.CategoryName} - {item.Description}");
+            }
+            Console.Write("==>");
+            int id = int.Parse(Console.ReadLine());
+            Console.WriteLine("");
+            Console.Clear();
+
+            Category category = db.Categories.FirstOrDefault(c => c.CategoryId == id);
+            if (category != null)
+            {
+                return category;
+            }
+            else
+            {
+                logger.Error("Invalid Category Id");
+                Console.WriteLine("");
+                return null;
+            }
+        }
+
         public static void DisplaySuppliers(NorthwindContext db)
         {
             // display all suppliers
