@@ -20,27 +20,31 @@ namespace NorthwindConsole
                 {
                     Console.WriteLine("1) Display Categories");
                     Console.WriteLine("2) Add Category");
-                    Console.WriteLine("3) Display Category and related products");
+                    Console.WriteLine("3) Display a Category and related products");
                     Console.WriteLine("4) Display all Categories and their related products");
                     Console.WriteLine("5) Display Products");
                     Console.WriteLine("6) Add Product");
                     Console.WriteLine("7) Display Specific Product Info");
                     Console.WriteLine("8) Edit Product Info");
                     Console.WriteLine("\"q\" to quit");
+                    Console.Write("==>");
                     choice = Console.ReadLine();
+                    Console.WriteLine("");
                     Console.Clear();
                     logger.Info($"Option {choice} selected");
                     if (choice == "1")
                     {
+                        //display all categories
                         var db = new NorthwindContext();
                         DisplayCategories(db);
                     }
                     else if (choice == "2")
                     {
+                        //add category
                         Category category = new Category();
-                        Console.WriteLine("Enter Category Name:");
+                        Console.Write("Enter Category Name: ");
                         category.CategoryName = Console.ReadLine();
-                        Console.WriteLine("Enter the Category Description:");
+                        Console.Write("Enter the Category Description: ");
                         category.Description = Console.ReadLine();
 
                         ValidationContext context = new ValidationContext(category, null, null);
@@ -56,6 +60,7 @@ namespace NorthwindConsole
                                 // generate validation error
                                 isValid = false;
                                 results.Add(new ValidationResult("Name exists", new string[] { "CategoryName" }));
+                                Console.WriteLine("");
                             }
                             else
                             {
@@ -63,6 +68,7 @@ namespace NorthwindConsole
                                 //save category to db
                                 db.AddCategory(category);
                                 logger.Info("Category added - {name}", category.CategoryName);
+                                Console.WriteLine("");
                             }
                         }
                         if (!isValid)
@@ -70,29 +76,35 @@ namespace NorthwindConsole
                             foreach (var result in results)
                             {
                                 logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
+                                Console.WriteLine("");
                             }
                         }
                     }
                     else if (choice == "3")
                     {
+                        //display a category and all of its related products
                         var db = new NorthwindContext();
                         var query = db.Categories.OrderBy(p => p.CategoryId);
 
                         Console.WriteLine("Select the category whose products you want to display:");
                         DisplayCategories(db);
-
+                        Console.Write("==>");
                         int id = int.Parse(Console.ReadLine());
+                        Console.WriteLine("");
                         Console.Clear();
                         logger.Info($"CategoryId {id} selected");
+                        Console.WriteLine("");
                         Category category = db.Categories.FirstOrDefault(c => c.CategoryId == id);
                         Console.WriteLine($"{category.CategoryName} - {category.Description}");
                         foreach (Product p in category.Products)
                         {
                             Console.WriteLine(p.ProductName);
                         }
+                        Console.WriteLine("");
                     }
                     else if (choice == "4")
                     {
+                        //display all categories and all of their related products
                         var db = new NorthwindContext();
                         var query = db.Categories.Include("Products").OrderBy(p => p.CategoryId);
                         foreach (var item in query)
@@ -103,9 +115,11 @@ namespace NorthwindConsole
                                 Console.WriteLine($"\t{p.ProductName}");
                             }
                         }
+                        Console.WriteLine("");
                     }
                     else if (choice == "5")
                     {
+                        //display products depending on user choice
                         string displayChoice;
                         do
                         {
@@ -114,16 +128,21 @@ namespace NorthwindConsole
                             Console.WriteLine("2) Active Products");
                             Console.WriteLine("3) Discontinued Products");
                             Console.WriteLine("4) Return to main menu");
+                            Console.Write("==>");
                             displayChoice = Console.ReadLine();
+                            Console.WriteLine("");
                             Console.Clear();
                             logger.Info($"Option {displayChoice} selected");
+                            Console.WriteLine("");
 
                             if (displayChoice == "1")
                             {
+                                //display all products
                                 var db = new NorthwindContext();
                                 var query = db.Products.OrderBy(p => p.ProductName);
 
                                 Console.WriteLine($"{query.Count()} product records returned");
+                                Console.WriteLine("");
                                 foreach (var item in query)
                                 {
                                     Console.WriteLine($"{item.ProductID}) {item.ProductName}");
@@ -132,10 +151,12 @@ namespace NorthwindConsole
                             }
                             else if (displayChoice == "2")
                             {
+                                //display all ative products
                                 var db = new NorthwindContext();
                                 var query = db.Products.Where(p => p.Discontinued == false).OrderBy(p => p.ProductName);
 
                                 Console.WriteLine($"{query.Count()} active product records returned");
+                                Console.WriteLine("");
                                 foreach (var item in query)
                                 {
                                     Console.WriteLine($"{item.ProductID} - {item.ProductName}");
@@ -144,10 +165,12 @@ namespace NorthwindConsole
                             }
                             else if (displayChoice == "3")
                             {
+                                //display all discontinued products
                                 var db = new NorthwindContext();
                                 var query = db.Products.Where(p => p.Discontinued == true).OrderBy(p => p.ProductName);
 
                                 Console.WriteLine($"{query.Count()} discontinued product records returned");
+                                Console.WriteLine("");
                                 foreach (var item in query)
                                 {
                                     Console.WriteLine($"{item.ProductID} - {item.ProductName}");
@@ -161,6 +184,7 @@ namespace NorthwindConsole
                     }
                     else if (choice == "6")
                     {
+                        //add new product
                         var db = new NorthwindContext();
                         Product product = new Product();
 
@@ -190,7 +214,7 @@ namespace NorthwindConsole
 
                         Console.Write("Enter Units in Stock: ");
                         product.UnitsInStock = Convert.ToInt16(Console.ReadLine());
-                        //int.TryParse(Console.ReadLine(), out int UnitsInStock);
+                        
 
                         Console.Write("Enter Units on Order: ");
                         product.UnitsOnOrder = Convert.ToInt16(Console.ReadLine());
@@ -214,6 +238,7 @@ namespace NorthwindConsole
                                 isValid = false;
                                 results.Add(new ValidationResult("Name exists", new string[] { "ProductName" }));
                                 Console.WriteLine("Product was not added to the database");
+                                Console.WriteLine("");
                             }
                             else
                             {
@@ -221,6 +246,7 @@ namespace NorthwindConsole
                                 //save category to db
                                 db.AddProduct(product);
                                 logger.Info("Product added - {name}", product.ProductName);
+                                Console.WriteLine("");
                             }
                         }
                         if (!isValid)
@@ -229,10 +255,12 @@ namespace NorthwindConsole
                             {
                                 logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                             }
+                            Console.WriteLine("");
                         }
                     }
                     else if (choice == "7")
                     {
+                        //display all info for a specific product
                         var db = new NorthwindContext();
                         var query = db.Products.OrderBy(p => p.ProductID);
 
@@ -245,6 +273,7 @@ namespace NorthwindConsole
                         int id = int.Parse(Console.ReadLine());
                         Console.Clear();
                         logger.Info($"ProductId {id} selected");
+                        Console.WriteLine("");
                         Product product = db.Products.FirstOrDefault(p => p.ProductID == id);
                         Console.WriteLine($"Product Name: {product.ProductName}");
                         Console.WriteLine($"Supplier ID: {product.SupplierId}");
@@ -255,22 +284,22 @@ namespace NorthwindConsole
                         Console.WriteLine($"Units on Order: {product.UnitsOnOrder}");
                         Console.WriteLine($"Reorder Level: {product.ReorderLevel}");
                         Console.WriteLine($"Discontinued: {product.Discontinued}");
+                        Console.WriteLine("");
 
                     }
                     else if (choice == "8")
                     {
-
-                        Console.WriteLine("Choose the product you wish to edit:");
+                        //edit an existing product
                         var db = new NorthwindContext();
-
+                        Console.WriteLine("Choose the product you wish to edit:");
                         var product = GetProduct(db);
-
                         Product UpdatedProduct = InputProduct(db);
                         if (UpdatedProduct != null)
                         {
                             UpdatedProduct.ProductID = product.ProductID;
                             db.EditProduct(UpdatedProduct);
                             logger.Info("Product (id: {productid}) updated", product.ProductID);
+                            Console.WriteLine("");
                         }
                     }
                     Console.WriteLine();
@@ -286,9 +315,11 @@ namespace NorthwindConsole
 
         public static Product InputProduct(NorthwindContext db)
         {
+            //ask user for all necessary information to add/edit a product
             Product product = new Product();
             Console.Write("Enter Product Name: ");
             product.ProductName = Console.ReadLine();
+            Console.WriteLine("");
 
             Console.WriteLine("Enter the Supplier ID from the list below:");
 
@@ -296,6 +327,7 @@ namespace NorthwindConsole
 
             Console.Write("==>");
             product.SupplierId = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("");
 
             Console.WriteLine("Enter the Cateogry ID from the list below:");
 
@@ -303,6 +335,7 @@ namespace NorthwindConsole
 
             Console.Write("==>");
             product.CategoryId = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("");
 
             Console.Write("Enter Quantity Per Unit: ");
             product.QuantityPerUnit = Console.ReadLine();
@@ -335,13 +368,15 @@ namespace NorthwindConsole
                 {
                     logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                 }
+                Console.WriteLine("");
             }
             return null;
         }
 
         public static Product GetProduct(NorthwindContext db)
         {
-
+            //display all products
+            //get and return user's choice
             var query = db.Products.OrderBy(p => p.ProductID);
             foreach (var item in query)
             {
@@ -349,6 +384,7 @@ namespace NorthwindConsole
             }
             Console.Write("==>");
             int id = int.Parse(Console.ReadLine());
+            Console.WriteLine("");
             Console.Clear();
 
             Product product = db.Products.FirstOrDefault(p => p.ProductID == id);
@@ -359,6 +395,7 @@ namespace NorthwindConsole
             else
             {
                 logger.Error("Invalid Post Id");
+                Console.WriteLine("");
                 return null;
             }
         }
@@ -371,6 +408,7 @@ namespace NorthwindConsole
             {
                 Console.WriteLine($" {s.SupplierId}) {s.CompanyName}");
             }
+
 
         }
 
