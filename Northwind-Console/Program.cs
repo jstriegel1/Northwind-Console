@@ -374,7 +374,9 @@ namespace NorthwindConsole
             Console.Write("Enter Reorder Level: ");
             product.ReorderLevel = Convert.ToInt16(Console.ReadLine());
 
-            product.Discontinued = false;
+            Console.WriteLine("Discontinued? True/False");
+            Console.Write("==> ");
+            product.Discontinued = Convert.ToBoolean(Console.ReadLine());
 
             ValidationContext context = new ValidationContext(product, null, null);
             List<ValidationResult> results = new List<ValidationResult>();
