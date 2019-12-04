@@ -105,13 +105,13 @@ namespace NorthwindConsole
                     }
                     else if (choice == "4")
                     {
-                        //display all categories and all of their related products
+                        //display all categories and all of their active related products
                         var db = new NorthwindContext();
                         var query = db.Categories.Include("Products").OrderBy(p => p.CategoryId);
                         foreach (var item in query)
                         {
                             Console.WriteLine($"{item.CategoryName}");
-                            foreach (Product p in item.Products)
+                            foreach (Product p in item.Products.Where(ap => ap.Discontinued == false))
                             {
                                 Console.WriteLine($"\t{p.ProductName}");
                             }
