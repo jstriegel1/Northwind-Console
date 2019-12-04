@@ -18,15 +18,21 @@ namespace NorthwindConsole
                 string choice;
                 do
                 {
+                    Console.WriteLine("Category Database Options:");
+                    Console.WriteLine("--------------------------");
                     Console.WriteLine("1) Display Categories");
                     Console.WriteLine("2) Add Category");
                     Console.WriteLine("3) Display a Category and related products");
                     Console.WriteLine("4) Display all Categories and their related products");
                     Console.WriteLine("5) Edit a Category");
+                    Console.WriteLine("");
+                    Console.WriteLine("Product Database Options:");
+                    Console.WriteLine("-------------------------");
                     Console.WriteLine("6) Display Products");
                     Console.WriteLine("7) Add Product");
                     Console.WriteLine("8) Display Specific Product Info");
                     Console.WriteLine("9) Edit Product Info");
+                    Console.WriteLine("");
                     Console.WriteLine("\"q\" to quit");
                     Console.Write("==>");
                     choice = Console.ReadLine();
